@@ -1,4 +1,4 @@
-# Exercize 1, Conditional Basics
+# Exercise 1, Conditional Basics
 # prompt the user for a day of the week, print out whether the day is Monday or not
 # prompt the user for a day of the week, print out whether the day is a weekday or a weekend
 # create variables and make up values for the number of hours worked in one week
@@ -54,7 +54,7 @@ while i >= -10:
 #
 print(' Loop squared numbers to 1,000,000')
 i = int(2)
-while i <= 1000000:
+while i <= 1_000_000:       #   can put underscores where commas go,  just for human visual
     i = i*i
     print(str(i))
 
@@ -96,17 +96,17 @@ for x in range(1,10):
 #  Here is an odd number: 3
 #  Here is an odd number: 5
 
-odd_number = 51
-while odd_number < 1 or odd_number > 50:
+skip_number = 51
+while skip_number < 1 or skip_number > 50:
     input_number = input('Please input an odd number between 1 and 50: ')
     if input_number.isdigit():
         if int(input_number)%2 != 0:
-            odd_number = int(input_number)
+            skip_number = int(input_number)
     else:
-        odd_number = 0
+        skip_number = 0
 for x in range(1,51):
     if x%2 != 0:
-        if x == odd_number:
+        if x == skip_number:
             print('Yikes! Skipping number: ',int(x)  )
         else:
             print('Here is an odd number:  ',int(x)  ) 
@@ -145,10 +145,128 @@ for x in range(pos_number,0,-1):
 
 
 # ------------------------------------------
-# Fizzbuzz
+# Exercise 3 - Fizzbuzz
 # One of the most common interview questions for entry-level programmers is the FizzBuzz test. 
 # Developed by Imran Ghory, the test is designed to test basic looping and conditional logic skills.
 # Write a program that prints the numbers from 1 to 100.
 # For multiples of three print "Fizz" instead of the number
 # For the multiples of five print "Buzz".
 # For numbers which are multiples of both three and five print "FizzBuzz".
+
+pos_number = 100
+for x in range(1, pos_number + 1):
+    if x%3 == 0:        #   multiple of 3
+        if x%5 ==0:         #  check also a multiple of 5
+            print('FizzBuzz')                  
+        else:
+            print('Fizz')                          
+    elif x%5 == 0:        #   multiple of 5, but not 3
+        print('Buzz')
+    else:
+        print('Printing a number: ',int(x) )
+
+
+# Exercise 4  --------------------------------------------
+# Display a table of powers.
+#       Prompt the user to enter an integer.
+#       Display a table of squares and cubes from 1 to the value entered.
+#       Ask if the user wants to continue.
+#       Assume that the user will enter valid data.
+#       Only continue if the user agrees to.
+# Example Output,  What number would you like to go up to? 5   Here is your table!
+#
+# number | squared | cubed
+# ------ | ------- | -----
+# 1      | 1       | 1
+# 2      | 4       | 8
+# 3      | 9       | 27
+# 4      | 16      | 64
+# 5      | 25      | 125
+# Bonus: Research python's format string specifiers to align the table
+
+pos_number = -1
+while pos_number < 1: 
+    input_number = input('Please input a positive number to iterate to: ')
+    if input_number.isdigit():
+        if int(input_number) > 0:
+            pos_number = int(input_number)
+    else:
+        pos_number = -1
+
+pos_number = 8        
+# print('{^6}  |  {^7}  |  {^5}').format('number', 'squared', 'cubed'))
+for x in range(1, pos_number + 1):
+    print('{:6}  |  {:7}  | {:5}'.format(x, x**2, x**3))
+
+#  or  try this  -  to align left    try   print('{:<6}  |  {:<7}  | {:<5}'.format(x, x**2, x**3))
+#  or  try this  -  to center    try   print('{:^6}  |  {:^7}  | {:^5}'.format(x, x**2, x**3))
+
+# -----------------------------------------------------------------------------------------------------
+#  Exercise 5
+#  prompt user to input a number grade, convert it to letter grade, then prompt them if they want to continue again
+user_wants_to_continue = 'yes'
+while user_wants_to_continue == 'yes':
+    grade = -1
+    while grade < 1: 
+        input_grade = input('Please enter a number grade: ')
+        if input_grade.isdigit():
+            grade = int(input_grade)
+        else:
+            grade = -1
+    if grade >= 88:
+        if grade >= 98:
+          print('A+')
+        else:  
+            print('A')
+    elif grade >= 80:
+        if grade >= 86:
+            print('B+')
+        else:    
+            print('B') 
+    elif grade >= 67:
+        if grade >= 78:
+            print('C+')
+        else:    
+            print('C') 
+    elif grade >= 60:
+        if grade >= 68:
+            print('D+')
+        else:    
+            print('D') 
+    elif grade >= 0:
+        print('F') 
+
+    user_wants_to_continue = input('Do you want to continue? ')    #  only 'yes' will make it loop again
+    # -----------------------------------------------------------------------------------------------------
+#  Exercise 6
+#    create a book dictionary
+
+books = [
+    {
+        'title': 'Atlas Shrugged',
+        'author': 'Ayn Rand',
+        'genre': 'Philosopy'
+    },
+    {
+        'title': 'Beautiful Evidence',
+        'author': 'Edward Tufte',
+        'genre': 'Visualizations'
+    },
+    {
+        'title': 'Oh the places you\'ll go',
+        'author': 'Dr. Seuss',
+        'genre': 'Whimsy'
+    }
+]
+
+genre_to_show = input('Enter a genre: ')
+for book in books:
+    if genre_to_show not in book['genre']:
+        continue
+ 
+    print('---------------')        
+    print('- title: %s' % book['title'])    
+    print('- author: %s' % book['author'])
+    print('- genre: %s' % book['genre'])
+
+    
