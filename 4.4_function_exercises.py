@@ -17,13 +17,13 @@ def is_two(passed_input):
 def is_two(passed_input):
     return_value = False
     if type(passed_input) is int:        #  return the type,   use IS, not = for comparison
-        if passed_value == 2:
+        if passed_input == 2:
             return_value = true
     elif type(passed_input) is float:
-        if passed_value == 2.0:
+        if passed_input == 2.0:
             return_value = true
     else:         #  assume it is a string
-        lower_input_value = passed_value.lower()
+        lower_input_value = passed_input.lower()
         if lower_input_value in ('two', '2',):
             return_value = true
     return return_value
@@ -82,7 +82,7 @@ def tip_amount(bill_total, tip_percent):
     if type(bill_total) is float and type(tip_percent) is float:
         if 0 < tip_percent < 1:
             return_tip = bill_total * tip_percent 
-    elif if type(bill_total) is int and type(tip_percent) is float:
+    elif type(bill_total) is int and type(tip_percent) is float:
         if 0 < tip_percent < 1:
             return_tip = bill_total * tip_percent 
     return return_tip
@@ -111,7 +111,7 @@ def apply_discount(original_price, discount_percent):
 # Define a function named handle_commas. It should accept a string 
 # that is a number that contains commas in it as input, 
 # and return a number as output.
-def handle_commas(input_str)
+def handle_commas(input_str):
     comma_pos = 10
     no_commas = input_str
     while comma_pos >= 0:
@@ -167,9 +167,9 @@ def get_letter_grade(input_grade):
 # and returns a string with all the vowels removed.
 
 def  remove_vowel(a_string):
-    for vowel in 'aeiou'
+    for vowel in 'aeiou':
         a_string = a_string.replace(vowel,'')
-        return a_string
+    return a_string
 
 # ---------------------    
 # Exercise 10
@@ -193,9 +193,9 @@ def normalize_name(a_string):
             valid_characters.append(character) 
     return ''.join(valid_characters)   # join is a method to turn the elemets from a LIST to a STRING
 
-normalize_name('Name') == {}".format(normalize_name('Name')}
-normalize_name('First Name') == {}".format(normalize_name('First Name')}
-normalize_name('% Completed') == {}".format(normalize_name('% Completed')}
+# normalize_name('Name') == {}".format(normalize_name('Name')))
+# normalize_name('First Name') == {}".format(normalize_name('First Name')))
+# normalize_name('% Completed') == {}".format(normalize_name('% Completed')))
 
 # ---------------------    
 # Exercise 11
@@ -211,7 +211,7 @@ def cumsums(numbers):
         next_number = last_number + current_number
         sums.appends(next.number)
 
-print("cumsums([1,1,1] == %s" % cumsum([1,1,1]))
-print("cumsums([1,2,3] == %s" % cumsum([1,2,3]))
-print("cumsums([1,2,3,4] == %s" % cumsum([1,2,3,4]))
+# print("cumsums([1,1,1] == %s" % cumsum([1,1,1]))
+# print("cumsums([1,2,3] == %s" % cumsum([1,2,3]))
+# print("cumsums([1,2,3,4] == %s" % cumsum([1,2,3,4]))
 
