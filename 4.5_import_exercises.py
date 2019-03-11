@@ -67,7 +67,6 @@ max_balance_user = ''
 total_unread_msg = 0
 grand_total_balance = 0
 fruit_dictionary = {}
-fruit_cnt = 0
 for user in profile_data:
     user_id = user['_id']
     user_cnt += 1
@@ -78,10 +77,10 @@ for user in profile_data:
     user_name = user['name']
     user_status = user['isActive']
     user_fruit = user['favoriteFruit']
-    fruit_cnt = 1
     if user['favoriteFruit'] in fruit_dictionary.keys():
-        fruit_cnt += 1
-    fruit_dictionary.update(user['favoriteFruit'] = fruit_cnt)      
+        fruit_dictionary[user_fruit] += 1
+    else:
+        fruit_dictionary[user_fruit] = 1
     if user_status == True:
         act_user_cnt += 1
     else:
