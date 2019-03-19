@@ -1,7 +1,10 @@
+# get_ipython().run_line_magic('matplotlib', 'qt')   #   use for jupyter notebooks only
+import matplotlib.pyplot as plt
 import pymysql as py
 import pandas as pd
 from pydataset import data
 from sqlalchemy import create_engine
+from datetime import datetime
 from env import user, host, pw
 
 #   Problem 1
@@ -130,7 +133,6 @@ def get_db_url(db, user, host, password):
     #    url = f'mysql+mysqlconnection://{user}:{password}:@host/{db}
     url = 'mysql+pymysql://{}:{}@{}/{}'.format(user, password, host, db)
     return(url)
-
 #   function to read env.py and establish connection to sql database
 def get_connection(db, user, host, password, driver='pymsql'):
 #    url = f'mysql+mysqlconnection://{user}:{password}:@host/{db}
@@ -150,18 +152,16 @@ titles_df = pd.read_sql('SELECT * FROM titles;', conn)
 #    information in the dataframe to figure out how many different titles each employee had
 
 #  first, see how many different employees per title
-from datetime import datetime
-# get_ipython().run_line_magic('matplotlib', 'qt')
-import matplotlib.pyplot as plt
 title_groupdf = titles_df.groupby('title').count()
-titles_df.title.value_counts()
-# titles_df.title.value_counts().plot.bar
+titles_df.title.value_counts().plot.bar
+plt.show()
+
 #   look at current titles only
 current_titles = titles_df[titles_df.to_date > datetime.now().date()]
+current_titles
 
 #  todo,   cant get this to plot
-# current_titles.value_counts().plot.bar()
-# current_titles.title.value_counts().plot.bar()
+current_titles.title.value_counts().plot.bar()
 
 #   join the data using pandas
 #  have to add suffix to left dataframe because one of the column names is not unique
