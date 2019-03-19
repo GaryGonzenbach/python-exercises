@@ -3,30 +3,39 @@ import pandas as pd
 from pydataset import data
 from sqlalchemy import create_engine
 from env import user, host, pw
+
 #   Problem 1
 #  Use pandas to convert the following list to a numeric series:
 #  ['$796,459.41', '$278.60', '$482,571.67', '$4,503,915.98', '$2,121,418.3', '$1,260,813.3', '$87,231.01', '$1,509,175.45', '$4,138,548.00', '$2,848,913.80', '$594,715.39', '$4,789,988.17', '$4,513,644.5', '$3,191,059.97', '$1,758,712.24', '$4,338,283.54', '$4,738,303.38', '$2,791,759.67', '$769,681.94', '$452,650.23']
 prices = ['$796,459.41', '$278.60', '$482,571.67', '$4,503,915.98', '$2,121,418.3', '$1,260,813.3', '$87,231.01', '$1,509,175.45', '$4,138,548.00', '$2,848,913.80', '$594,715.39', '$4,789,988.17', '$4,513,644.5', '$3,191,059.97', '$1,758,712.24', '$4,338,283.54', '$4,738,303.38', '$2,791,759.67', '$769,681.94', '$452,650.23']
 prices = pd.Series(prices).str.replace('$','').str.replace(',','')
 prices.astype('float') 
+
+# another method would be to loop through the series and format each
+#   row individually.  works exactly the same way
+prices = ['$796,459.41', '$278.60', '$482,571.67', '$4,503,915.98', '$2,121,418.3', '$1,260,813.3', '$87,231.01', '$1,509,175.45', '$4,138,548.00', '$2,848,913.80', '$594,715.39', '$4,789,988.17', '$4,513,644.5', '$3,191,059.97', '$1,758,712.24', '$4,338,283.54', '$4,738,303.38', '$2,791,759.67', '$769,681.94', '$452,650.23']
+prices_series = pd.Series(prices)
+for x in prices_series:
+    ystring = x
+    ystring = x.replace('$','').replace(',','')
+    prices_series[x] = ystring
 # ------------------------------------------------------
 # Problem 2,  Load the mpg dataset. Read the documentation for it, and use the data to answer these questions:
 #   How many rows and columns are there?
 #   What are the data types?
 df = data('mpg')
-# data('mpg', show_doc=True)
+data('mpg', show_doc=True)
 print(' There are x rows, y columns:')
 print(df.shape)         # 234 rows  and 11 columns
 print('\n')
 print(' The dtypes:')
 print(df.dtypes)
+print(df.info())
 # print('\n')
 # print(df)    
 #  ---------------------------------------------------------------
-# do any cars that have better city mileage than highway mileage
-# 
-# creates an index, the value can be either 
-#     True or False,  (len then returns the total count)
+# do any cars that have better city mileage than highway mileage?
+# creates an index, the value can be either True or False,  (len then returns the total count)
 #  so, this line is not effective at evaluating the condition
 len( (df.cty > df.hwy) )  
 # 
@@ -59,7 +68,6 @@ grouped_df = df.groupby('manufacturer').agg({'hwy': 'mean', 'cty': 'mean'})
 # now loop and average the "hwy" "cty" averages, then sort in Desc order
 for i in grouped_df:
     grouped_df['average_mileage'] = (grouped_df['hwy'] * 0.45 + grouped_df['cty'] * 0.55)
-
 grouped_df.sort_values(by='average_mileage', ascending=False, inplace=True)
 grouped_df
 print(' The number of different car manufacturers is ',len(grouped_df))
@@ -74,22 +82,40 @@ print(' Automatic trans has better mileage')
 
 #  other method
 #    create a new column that simplifies the tran column into only 'auto' or 'manual
-find_t_type = lambda tran: 'auto' if tran[0:4] == 'auto' else 'manual'
+find_t_type = lambda trans: 'auto' if trans[0:4] == 'auto' else 'manual'
 df.trans.apply(find_t_type)
-
+#  todo; cant get the lambda to work,  it runs but doesn't seem to affect the dataframe....    need to get help with this
 
 #---------------------------------------------------------------
 # Problem 3, Load the Mammals dataset. Read the documentation for it, and use the data to answer these questions:
-#    How many rows and columns are there?
+#   How many rows and columns are there?
 #   What are the data types?
 #   What is the the weight of the fastest animal?
-#   What is the overal percentage of Prspecials?
+#   What is the overal percentage of specials?
 #   How many animals are hoppers that are above the median speed? 
 #     What percentage is this?
 
+df = data('Mammals')
+# data('Mammals', show_doc=True)
+# print(df.shape)         # 234 rows  and 11 columns
+# print(df.head())
+#  -   looks like this isn't working,    need to follow up why
+#  df.sort_values(by='speed', ascending=False)
 
+#  - find the fastest,   all three of these different methods work
+df.speed.max()
+df.nlargest(5, 'speed')
+max_speed_index = df.speed.idxmax()
+df.loc[max_speed_index]
 
+#   What is the overal percentage of specials?
+num_specials = len(df.loc[df['specials'] == True])
+percent_specials = (num_specials / len(df)) * 100
 
+#   How many animals are hoppers that are above the median speed? 
+#     What percentage is this?
+median_speed_all = df.speed.median()
+(len(df.loc[ (df['hoppers'] == True) & (df['speed'] > median_speed_all) ]) / 107) * 100
 
 #---------------------------------------------------------------
 # Problem 4,
@@ -98,14 +124,6 @@ df.trans.apply(find_t_type)
 #      and database name and return a url formatted like in the examples in this lesson.
 #    Use your function to obtain a connection to the employees database.
 #       Read the employees and titles tables into two separate data frames
-
-import pymysql as py        #   python sql driver
-import pandas as pd
-from pydataset import data
-from sqlalchemy import create_engine
-from env import user, host, pw
-import matplotlib.pyplot as plt
-%matplotlib qt   
 
 # this function just returns the url string to pass to get_connection
 def get_db_url(db, user, host, password):
@@ -127,23 +145,37 @@ def get_connection(db, user, host, password, driver='pymsql'):
 
 conn = get_connection('employees', user, host, pw, driver='pymysql')           
 employees_df = pd.read_sql('SELECT * FROM employees;', conn)
-titles_df = pd.read_sql('SELECT * FROM titles WHERE to_date > NOW();', conn)
-title_groupdf = titles_df.groupby('title').agg({'emp_no': 'count'})
-titles_df.title.value_counts().plot.bar
-
-#  probably better to load the entire titles dataframe rather than let SQL do it in the WHERE claus, (faster)  - then you also have enough
+titles_df = pd.read_sql('SELECT * FROM titles;', conn)
+#  better to load the entire titles dataframe rather than let SQL do it in the WHERE claus, (faster)  - then you also have enough
 #    information in the dataframe to figure out how many different titles each employee had
 
-#   how many titles does each employee have  (on entire titles dataframe)
-titles.emp_no.value_counts()  
-plt.subplots_adjust(left=0.15)
+#  first, see how many different employees per title
+from datetime import datetime
+# get_ipython().run_line_magic('matplotlib', 'qt')
+import matplotlib.pyplot as plt
+title_groupdf = titles_df.groupby('title').count()
+titles_df.title.value_counts()
+# titles_df.title.value_counts().plot.bar
+#   look at current titles only
+current_titles = titles_df[titles_df.to_date > datetime.now().date()]
+
+#  todo,   cant get this to plot
+# current_titles.value_counts().plot.bar()
+# current_titles.title.value_counts().plot.bar()
 
 #   join the data using pandas
 #  have to add suffix to left dataframe because one of the column names is not unique
 #    pandas join defaults to left,   so need to specific inner join
-employees.join(titles, on='emp_no', lsuffix='_emp', how='inner')
-
+# how many titles does each employee have?
+titles_df.emp_no.value_counts()
+titles_df.emp_no.value_counts().value_counts()
+# titles_df.emp_no.value_counts().value_counts().plot.bar()
+# get_ipython().run_line_magic('pinfo', 'employees.join')
+employees_with_titles = employees_df.join(titles_df, on='emp_no', lsuffix='_emp', how='inner')
+# get_ipython().run_line_magic('pinfo', 'employees.merge')
+# get_ipython().run_line_magic('pinfo', 'employees.join')
 #  find hire date of most recent employee
+employees_with_titles
+employees_with_titles.groupby('title')[['hire_date']].max()
 
-employees_with_titles.groupby('title'),[['hire_date']]
 
